@@ -23,6 +23,7 @@ if (app.Environment.IsDevelopment())
 
 int courseId = 5;
 int userId = 6;
+int categiryId = 4;
 
 app.MapGet("/", () => "Hello World!");
 
@@ -134,6 +135,16 @@ app.MapGet("/categories/{id}", (Context context, int id) =>
     if (category is null)
         return Results.NotFound();
     return Results.Ok(category);
+});
+
+app.MapPost("/categories/new-category", (Context context , Category category)=>{
+    var myCategory = context.Categories.FirstOrDefault(c=>c.Name == category.Name);
+    if(myCategory is not null){
+        category.Id = categiryId++;
+        context.Categories.Add(category);
+        return Results.Ok(category);
+    }
+    return Results.NotFound();
 });
 
 
